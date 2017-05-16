@@ -1,0 +1,91 @@
+class Game
+	@@height = 3 
+	@@width = 3 
+	@@turn = 1
+	def initialize (mode)
+		@grid = Array.new(@@height){Array.new(@@width," ")}
+		@finished = false
+	end 
+
+	def finished
+		return @finished
+	end 
+
+	def show
+		@@height.times {print("---")}
+		print "\n"
+		@grid.each {|x|	 
+			x.each {
+				|y| print "|#{y}|"
+			}
+			print "\n" 
+			@@height.times {print("---")}
+			
+			print "\n"}
+	end 
+
+	def win
+		#rows 
+		@grid.each do |x|
+			if (x[0] == x[1]) &&(x[1] == x[2])
+				return x[0]
+			end 
+		end 
+
+		#cols 
+		@grid.transpose.each do |x|
+			if (x[0] == x[1]) &&(x[1] == x[2])
+				return x[0]
+			end 
+		end 
+
+		#diagonals
+		if (@grid[0][0] == @grid[1][1]) && (@grid[1][1] == @grid[2][2])
+			return @grid[0][0]
+		elsif (@grid[0][2] == @grid[1][1]) && (@grid[1][1] == @grid[2][0])
+			return @grid[0][2]
+		end 
+
+		return " " 
+
+
+	end 
+
+	def play
+		move = gets.chomp()
+		move = move.split(",")
+		if (@grid[move[0].to_i][move[1].to_i] == " ")
+			@grid[move[0].to_i][move[1].to_i] = "X" if @@turn%2 == 0
+			@grid[move[0].to_i][move[1].to_i] = "0" if @@turn%2 == 1
+
+			
+		end 
+		@@turn +=1
+	end
+
+
+
+
+end
+
+g = Game.new(0)
+while (true)
+	#player 1
+	g.show
+	g.play
+	win = g.win
+	if win != " "
+		break
+	end 
+
+	#player 2 
+	g.show
+	g.play
+	win = g.win
+	if win != " "
+		break
+	end 
+
+end 
+
+g.show
